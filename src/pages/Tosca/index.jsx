@@ -39,9 +39,7 @@ class Tosca extends React.Component {
       tableView: GRQ_TABLE_VIEW_DEFAULT, // boolean
     };
 
-    this.grq_es_url = LOCAL_DEV
-      ? GRQ_ES_URL
-      : `${window.origin}/${GRQ_ES_URL}`;
+    this.grq_es_url = LOCAL_DEV ? GRQ_ES_URL : `${window.origin}/${GRQ_ES_URL}`;
 
     this.mapRef = React.createRef();
     this.pageRef = React.createRef();
@@ -113,7 +111,9 @@ class Tosca extends React.Component {
                       target="on-demand-tosca"
                       size="small"
                       color="success"
-                      href={`/tosca/on-demand?query=${query}&total=${dataCount}`}
+                      href={encodeURI(
+                        `/tosca/on-demand?query=${query}&total=${dataCount}`
+                      )}
                     />
                   </div>
                   <div className="tosca-button">
@@ -121,7 +121,7 @@ class Tosca extends React.Component {
                       label="Create Rule"
                       target="tosca-user-rules"
                       size="small"
-                      href={`tosca/user-rule?query=${query}`}
+                      href={encodeURI(`tosca/user-rule?query=${query}`)}
                     />
                   </div>
                   <div className="tosca-button">

@@ -82,7 +82,9 @@ class Figaro extends React.Component {
                       target="on-demand-figaro"
                       size="small"
                       color="success"
-                      href={`/figaro/on-demand?query=${query}&total=${dataCount}`}
+                      href={encodeURI(
+                        `/figaro/on-demand?query=${query}&total=${dataCount}`
+                      )}
                     />
                   </div>
                   <div className="figaro-button">
@@ -90,7 +92,7 @@ class Figaro extends React.Component {
                       label="Create Rule"
                       target="figaro-user-rules"
                       size="small"
-                      href={`figaro/user-rule?query=${query}`}
+                      href={encodeURI(`figaro/user-rule?query=${query}`)}
                     />
                   </div>
                   <div className="figaro-button">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import {
@@ -7,6 +7,8 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+
+import Keycloak from "keycloak-js";
 
 import Tosca from "../Tosca";
 import ToscaOnDemand from "../ToscaOnDemand";
@@ -23,7 +25,25 @@ import { ROOT_PATH } from "../../config/index.js";
 import "./style.scss";
 
 const Routes = (props) => {
+  const [mounted, setMounted] = useState(false);
   const classTheme = props.darkMode ? "__theme-dark" : "__theme-light";
+
+  useEffect(() => {
+    setMounted(true);
+    if (!mounted) {
+      const keycloak = Keycloak({
+        realm: "hysds",
+        clientId: "hysds_ui",
+        url: "http://localhost:8080/auth/",
+      });
+      console.log(keycloak);
+
+      keycloak.init({ onLoad: "login-required" }).then((auth) => {
+        // this.setState({ keycloak, auth });
+        console.log("authenticated: ", auth);
+      });
+    }
+  });
 
   return (
     <div className={classTheme}>
