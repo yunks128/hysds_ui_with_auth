@@ -34,7 +34,9 @@ const Routes = (props) => {
 
   useEffect(() => {
     setMounted(true);
-    if (!mounted) handleAuth(props.authenticate);
+    if (AUTH && !mounted) {
+      handleAuth(props.authenticate);
+    }
   });
 
   if (AUTH && !authenticated) {
