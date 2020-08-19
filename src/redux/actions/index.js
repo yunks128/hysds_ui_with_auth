@@ -1,4 +1,6 @@
 import {
+  AUTHENTICATE, // authentication
+  LOGOUT,
   GET_DATASET_ID, // reactivesearch
   RETRIEVE_DATA,
   SET_QUERY,
@@ -156,4 +158,13 @@ export const unclickQueryRegion = () => ({
 export const editTheme = (darkMode) => ({
   type: EDIT_THEME,
   payload: darkMode,
+});
+
+export const authenticate = (payload) => ({
+  type: AUTHENTICATE,
+  payload,
+});
+
+export const logout = () => ({
+  type: LOGOUT,
 });

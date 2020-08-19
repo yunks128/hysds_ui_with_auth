@@ -1,3 +1,7 @@
+// authentication
+export const AUTHENTICATE = "AUTHENTICATE";
+export const LOGOUT = "LOGOUT";
+
 // actions to handle the states for custom ReactiveComponents
 export const BBOX_EDIT = "BBOX_EDIT";
 export const CLEAR_REDUX_STORE = "CLEAR_REDUX_STORE";

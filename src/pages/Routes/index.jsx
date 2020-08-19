@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import Keycloak from "keycloak-js";
+import { authenticate, logout } from "../../redux/actions";
 
 import Tosca from "../Tosca";
 import ToscaOnDemand from "../ToscaOnDemand";
@@ -25,9 +26,14 @@ import { ROOT_PATH } from "../../config/index.js";
 import "./style.scss";
 
 const Routes = (props) => {
+  const { authenticated, darkMode } = props;
   const [mounted, setMounted] = useState(false);
-  const classTheme = props.darkMode ? "__theme-dark" : "__theme-light";
+  const classTheme = darkMode ? "__theme-dark" : "__theme-light";
 
+  /**
+   * de-couple this authentication logic to another function
+   * func should take in the redux action "prop" to authenticate
+   */
   useEffect(() => {
     setMounted(true);
     if (!mounted) {
@@ -36,14 +42,25 @@ const Routes = (props) => {
         clientId: "hysds_ui",
         url: "http://localhost:8080/auth/",
       });
-      console.log(keycloak);
 
       keycloak.init({ onLoad: "login-required" }).then((auth) => {
-        // this.setState({ keycloak, auth });
-        console.log("authenticated: ", auth);
+        props.authenticate({
+          authenticated: auth,
+          authInfo: keycloak,
+        });
       });
     }
   });
+
+  if (!authenticated) {
+    return (
+      <div className={classTheme}>
+        <p>
+          <b>Loading...</b>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={classTheme}>
@@ -75,7 +92,13 @@ const Routes = (props) => {
 };
 
 const mapStateToProps = (state) => ({
+  authenticated: state.authReducer.authenticated,
   darkMode: state.themeReducer.darkMode,
 });
 
-export default connect(mapStateToProps)(Routes);
+const mapDispatchToProps = (dispatch) => ({
+  authenticate: (payload) => dispatch(authenticate(payload)),
+  logout: () => dispatch(logout()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);
