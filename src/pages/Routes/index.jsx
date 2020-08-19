@@ -8,8 +8,10 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import Keycloak from "keycloak-js";
+import { handleAuth } from "../../auth";
 import { authenticate, logout } from "../../redux/actions";
+
+import LoadingPage from "../LoadingPage";
 
 import Tosca from "../Tosca";
 import ToscaOnDemand from "../ToscaOnDemand";
@@ -21,7 +23,7 @@ import FigaroOnDemand from "../FigaroOnDemand";
 import FigaroUserRules from "../FigaroUserRules";
 import FigaroRuleEditor from "../FigaroRuleEditor";
 
-import { ROOT_PATH } from "../../config/index.js";
+import { ROOT_PATH, AUTH } from "../../config/index.js";
 
 import "./style.scss";
 
@@ -30,34 +32,15 @@ const Routes = (props) => {
   const [mounted, setMounted] = useState(false);
   const classTheme = darkMode ? "__theme-dark" : "__theme-light";
 
-  /**
-   * de-couple this authentication logic to another function
-   * func should take in the redux action "prop" to authenticate
-   */
   useEffect(() => {
     setMounted(true);
-    if (!mounted) {
-      const keycloak = Keycloak({
-        realm: "hysds",
-        clientId: "hysds_ui",
-        url: "http://localhost:8080/auth/",
-      });
-
-      keycloak.init({ onLoad: "login-required" }).then((auth) => {
-        props.authenticate({
-          authenticated: auth,
-          authInfo: keycloak,
-        });
-      });
-    }
+    if (!mounted) handleAuth(props.authenticate);
   });
 
-  if (!authenticated) {
+  if (AUTH && !authenticated) {
     return (
       <div className={classTheme}>
-        <p>
-          <b>Loading...</b>
-        </p>
+        <LoadingPage />
       </div>
     );
   }
