@@ -2,7 +2,7 @@
 
 .header-bar {
   z-index: 10000;
-  height: 45px;
+  height: 47px;
   width: 100%;
   color: #ffffff;
 
@@ -27,6 +27,7 @@
       text-decoration: none;
       color: white;
       padding: 14px 16px;
+      cursor: pointer;
     }
   }
 }
