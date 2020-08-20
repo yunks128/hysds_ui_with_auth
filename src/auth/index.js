@@ -19,8 +19,10 @@ export const handleAuth = (authAction) => {
   });
 };
 
-export const handleLogout = () => {
+export const handleLogout = (logoutAction) => {
   /**
    * redux action as input
    */
+  keycloak.logout();
+  logoutAction();
 };

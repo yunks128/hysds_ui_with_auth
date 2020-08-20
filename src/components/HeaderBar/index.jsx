@@ -1,13 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
-import { editTheme } from "../../redux/actions";
+import { editTheme, logout } from "../../redux/actions";
 import { Button } from "../Buttons";
+
+import { handleLogout } from "../../auth";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
-import { MOZART_REST_API_V1, GRQ_REST_API_V1, KIBANA_URL, RABBIT_MQ_PORT } from "../../config";
+import {
+  MOZART_REST_API_V1,
+  GRQ_REST_API_V1,
+  KIBANA_URL,
+  RABBIT_MQ_PORT,
+} from "../../config";
 
 import styles from "../../scss/constants.scss";
 import "./style.scss";
@@ -64,6 +72,7 @@ const DropdownSources = () => (
 );
 
 const HeaderBar = (props) => {
+  const { logout } = props;
   let { title, theme } = props;
   title = props.title || "HySDS";
 
@@ -98,7 +107,7 @@ const HeaderBar = (props) => {
           onClick={_themeHandler}
         />
         <div className="header-bar-buffer"></div>
-        <li>
+        <li onClick={() => handleLogout(props.logout)}>
           <a>Logout</a>
         </li>
       </ul>
@@ -115,6 +124,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(logout()),
   editTheme: (darkMode) => dispatch(editTheme(darkMode)),
 });
 
