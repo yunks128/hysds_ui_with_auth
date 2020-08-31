@@ -45,6 +45,17 @@ class Tosca extends React.Component {
     this.pageRef = React.createRef();
   }
 
+  componentDidMount() {
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${this.props.token}`,
+      },
+    };
+    fetch("http://localhost:5000/api", headers)
+      .then((res) => res.json())
+      .then((d) => console.log(d));
+  }
+
   componentDidUpdate() {
     // scrolls to top of page if the query region button is pressed
     if (this.props.queryRegion)
@@ -165,6 +176,7 @@ const mapStateToProps = (state) => ({
   dataCount: state.generalReducer.dataCount,
   query: state.generalReducer.query,
   queryRegion: state.reactivesearchReducer.queryRegion,
+  token: state.authReducer.token,
 });
 
 // Redux actions

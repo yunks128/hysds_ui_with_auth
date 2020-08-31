@@ -12,8 +12,7 @@ const authReducer = (state = initialState, action) => {
     case AUTHENTICATE: {
       return {
         ...state,
-        authenticated: action.payload.authenticated,
-        authInfo: action.payload.authInfo,
+        ...action.payload,
       };
     }
     case LOGOUT: {

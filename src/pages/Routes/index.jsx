@@ -78,6 +78,7 @@ const Routes = (props) => {
 
 const mapStateToProps = (state) => ({
   authenticated: state.authReducer.authenticated,
+  token: state.authReducer.token,
   darkMode: state.themeReducer.darkMode,
 });
 
