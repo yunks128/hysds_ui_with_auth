@@ -64,9 +64,6 @@ const DropdownSources = () => (
       >
         RabbitMQ
       </a>
-      <a href="https://github.com/hysds" target="_blank">
-        HySDS (Github)
-      </a>
     </div>
   </div>
 );

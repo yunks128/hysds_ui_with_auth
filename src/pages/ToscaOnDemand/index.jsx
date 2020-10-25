@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Helmet } from "react-helmet";
 
 import QueryEditor from "../../components/QueryEditor";
@@ -9,6 +9,7 @@ import { Border, SubmitStatusBar } from "../../components/miscellaneous";
 import TagInput from "../../components/TagInput";
 import QueueInput from "../../components/QueueInput";
 import PriorityInput from "../../components/PriorityInput";
+import FormInput from "../../components/FormInput";
 
 import { Button } from "../../components/Buttons";
 import HeaderBar from "../../components/HeaderBar";
@@ -21,6 +22,9 @@ import {
   editParams,
   editQuery,
   editTags,
+  editSoftTimeLimit,
+  editTimeLimit,
+  editDiskUsage,
 } from "../../redux/actions";
 import {
   getOnDemandJobs,
@@ -29,6 +33,7 @@ import {
   editDataCount,
 } from "../../redux/actions/tosca";
 
+import { sanitizeJobParams } from "../../utils";
 import { GRQ_REST_API_V1 } from "../../config";
 
 import "./style.scss";
@@ -73,6 +78,7 @@ class ToscaOnDemand extends React.Component {
     this.setState({ submitInProgress: 1 });
 
     const headers = { "Content-Type": "application/json" };
+    const newParams = sanitizeJobParams(this.props.params);
     const data = {
       tags: this.props.tags,
       job_type: this.props.hysdsio,
@@ -80,8 +86,15 @@ class ToscaOnDemand extends React.Component {
       queue: this.props.queue,
       priority: this.props.priority,
       query: this.props.query,
-      kwargs: JSON.stringify(this.props.params),
+      kwargs: JSON.stringify(newParams),
     };
+
+    if (this.props.timeLimit) data.time_limit = parseInt(this.props.timeLimit);
+
+    if (this.props.softTimeLimit)
+      data.soft_time_limit = parseInt(this.props.softTimeLimit);
+
+    if (this.props.diskUsage) data.disk_usage = this.props.diskUsage;
 
     const jobSubmitUrl = `${GRQ_REST_API_V1}/grq/on-demand`;
     fetch(jobSubmitUrl, { method: "POST", headers, body: JSON.stringify(data) })
@@ -114,7 +127,6 @@ class ToscaOnDemand extends React.Component {
     } = this.props;
     const { submitInProgress, submitSuccess, submitFailed } = this.state;
 
-    const divider = paramsList.length > 0 ? <Border /> : null;
     const hysdsioLabel = paramsList.length > 0 ? <h2>{hysdsio}</h2> : null;
 
     const submissionTypeLabel = this.props.jobSpec ? (
@@ -188,7 +200,7 @@ class ToscaOnDemand extends React.Component {
                     editJobPriority={editJobPriority}
                   />
                 </div>
-                {divider}
+                {paramsList.length > 0 ? <Border /> : null}
                 {hysdsioLabel}
                 <JobParams
                   url={true} // update query params in url
@@ -196,6 +208,33 @@ class ToscaOnDemand extends React.Component {
                   paramsList={paramsList}
                   params={params}
                 />
+                {this.props.jobSpec ? <Border /> : null}
+                {this.props.jobSpec ? (
+                  <Fragment>
+                    <FormInput
+                      label="Soft Time Limit"
+                      value={this.props.softTimeLimit}
+                      editValue={editSoftTimeLimit}
+                      type="number"
+                      min={1}
+                      placeholder="(seconds)"
+                    />
+                    <FormInput
+                      label="Time Limit"
+                      value={this.props.timeLimit}
+                      editValue={editTimeLimit}
+                      type="number"
+                      min={1}
+                      placeholder="(seconds)"
+                    />
+                    <FormInput
+                      label="Disk Usage"
+                      value={this.props.diskUsage}
+                      editValue={editDiskUsage}
+                      placeholder="(KB, MB, GB)"
+                    />
+                  </Fragment>
+                ) : null}
                 <div className="tosca-on-demand-button-wrapper">
                   <div className="tosca-on-demand-button">
                     <Button
@@ -252,6 +291,9 @@ const mapStateToProps = (state) => ({
   paramsList: state.generalReducer.paramsList,
   params: state.generalReducer.params,
   tags: state.generalReducer.tags,
+  softTimeLimit: state.generalReducer.softTimeLimit,
+  timeLimit: state.generalReducer.timeLimit,
+  diskUsage: state.generalReducer.diskUsage,
   submissionType: state.generalReducer.submissionType,
   dataCount: state.generalReducer.dataCount,
 });

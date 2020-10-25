@@ -8,7 +8,8 @@ exports.makeDropdownOptions = (data) =>
 
 exports.constructUrl = (key, value) => {
   const params = new URLSearchParams(location.search);
-  params.set(key, value);
+  if (value) params.set(key, value);
+  else params.delete(key);
   const newUrl = `${location.origin}${location.pathname}?${params.toString()}`;
   history.pushState({}, "", newUrl);
 };
@@ -33,6 +34,18 @@ const IGNORE_QUERY_PARAMS = [
   "tags",
 ];
 
+exports.sanitizeJobParams = (params) => {
+  let cleanedParams = {};
+  for (let key in params) {
+    if (params[key])
+      cleanedParams = {
+        ...cleanedParams,
+        ...{ [key]: params[key] },
+      };
+  }
+  return cleanedParams;
+};
+
 exports.extractJobParams = (urlParams) => {
   const params = {};
   urlParams.forEach((value, key) => {
@@ -56,9 +69,11 @@ exports.clearUrlJobParams = () => {
 
 exports.editUrlJobParam = (key, value) => {
   const params = new URLSearchParams(location.search);
+
   try {
-    value = JSON.stringify(value);
+    if (typeof value === "object") value = JSON.stringify(value);
   } catch (err) {}
+
   params.set(key, value);
   const newUrl = `${location.origin}${location.pathname}?${params.toString()}`;
   history.pushState({}, "", newUrl);

@@ -1,6 +1,8 @@
+const React = require("react");
+
 exports.FIGARO_DISPLAY_COLUMNS = [
   { Header: "status", accessor: "status" },
-  { Header: "ID", accessor: "_id" },
+  { Header: "job name", accessor: "job.name" },
   { Header: "job type", accessor: "job.type" },
   { Header: "queue", accessor: "job.job_info.job_queue" },
   { Header: "node", accessor: "job.job_info.execute_node" },
@@ -121,6 +123,7 @@ exports.FIELDS = [
   "tags",
   "job.name",
   "job.priority",
+  "job.retry_count",
   "job.type",
   "job.job_info.execute_node",
   "job.job_info.facts.ec2_instance_type",

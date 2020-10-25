@@ -1,3 +1,5 @@
+const React = require("react");
+
 // DEFINING THE OPTIONS FOR THE LEAFLET MAP
 /*******************************************************************************/
 exports.DISPLAY_MAP = true;
@@ -55,15 +57,15 @@ exports.GRQ_TABLE_VIEW_DEFAULT = true;
 
 exports.FILTERS = [
   {
-    componentId: "dataset",
-    dataField: "dataset.keyword",
-    title: "Dataset",
-    type: "single",
-  },
-  {
     componentId: "dataset_type",
     dataField: "dataset_type.keyword",
     title: "Dataset Type",
+    type: "single",
+  },
+  {
+    componentId: "dataset_level",
+    dataField: "dataset_level.keyword",
+    title: "Dataset Level",
     type: "single",
   },
   {
@@ -83,6 +85,12 @@ exports.FILTERS = [
     dataField: "continent.keyword",
     title: "Continent",
     type: "single",
+  },
+  {
+    componentId: "tags",
+    dataField: "metadata.tags.keyword",
+    title: "Tags",
+    type: "multi",
   },
   {
     componentId: "starttime",
@@ -106,7 +114,7 @@ exports.FILTERS = [
 
 exports.QUERY_LOGIC = {
   and: [
-    "dataset",
+    "dataset_level",
     "dataset_type",
     "starttime",
     "platform",
@@ -151,6 +159,17 @@ exports.GRQ_DISPLAY_COLUMNS = [
     accessor: (d) =>
       d.metadata ? d.metadata.trackNumber || d.metadata.track_number : null,
     width: 50,
+  },
+  {
+    id: "browse",
+    width: 100,
+    resizable: false,
+    Cell: (state) =>
+      state.original.urls ? (
+        <a target="_blank" href={state.original.urls[0]}>
+          Browse
+        </a>
+      ) : null,
   },
 ];
 
