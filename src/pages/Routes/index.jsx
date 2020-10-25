@@ -29,15 +29,15 @@ import "./style.scss";
 
 const Routes = (props) => {
   const { authenticated, darkMode } = props;
-  const [mounted, setMounted] = useState(false);
+  // const [mounted, setMounted] = useState(false);
   const classTheme = darkMode ? "__theme-dark" : "__theme-light";
 
   useEffect(() => {
-    setMounted(true);
-    if (AUTH && !mounted) {
+    // setMounted(true);
+    if (AUTH) {
       handleAuth(props.authenticate);
     }
-  });
+  }, []);
 
   if (AUTH && !authenticated) {
     return (
