@@ -111,6 +111,7 @@ class FigaroResultsList extends React.Component {
           dataField="figaro-reactive-list"
           className="reactivesearch-results-list"
           pagination={true}
+          URLParams={true}
           size={pageSize}
           pages={7}
           sortOptions={sortOptions}

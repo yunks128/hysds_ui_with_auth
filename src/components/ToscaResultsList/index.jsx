@@ -132,6 +132,7 @@ class ResultsList extends React.Component {
           pages={7}
           stream={true}
           pagination={true}
+          URLParams={true}
           scrollOnChange={false}
           paginationAt="both"
           onData={this.props.retrieveData}
