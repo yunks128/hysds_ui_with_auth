@@ -74,6 +74,6 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
-    symlinks: true,
+    symlinks: false,
   },
 };
