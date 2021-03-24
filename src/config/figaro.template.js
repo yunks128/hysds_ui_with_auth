@@ -1,4 +1,4 @@
-const React = require("react");
+const React = require("react"); // lgtm [js/unused-local-variable]
 
 exports.FIGARO_DISPLAY_COLUMNS = [
   { Header: "status", accessor: "status" },
