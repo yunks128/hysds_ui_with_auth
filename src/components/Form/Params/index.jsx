@@ -87,7 +87,7 @@ function Params(props) {
                 <Select
                   label={paramName}
                   value={
-                    value != undefined
+                    value !== undefined
                       ? { label: value.toString(), value: value || "" }
                       : null
                   }
