@@ -32,7 +32,6 @@ function renderFilter(filter, queryLogic) {
           URLParams={true}
           sortBy={sortBy}
           defaultValue={null || defaultValue}
-          react={queryLogic}
           className="reactivesearch-input reactivesearch-multilist"
         />
       );
