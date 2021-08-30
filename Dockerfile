@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN npm install --silent
-RUN npm run build
+RUN npm install --silent && \
+    npm run build
 
 
 # Creating the web server

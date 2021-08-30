@@ -45,12 +45,9 @@ exports.extractJobParams = (urlParams) => {
 
 exports.clearUrlJobParams = () => {
   const params = new URLSearchParams(location.search);
-  const toDelete = [];
-  for (let pair of params.entries()) {
-    const key = pair[0];
-    if (!IGNORE_QUERY_PARAMS.includes(key)) toDelete.push(key);
-  }
-  toDelete.forEach((p) => params.delete(p));
+  [...params.keys()]
+    .filter((k) => !IGNORE_QUERY_PARAMS.includes(k))
+    .forEach((k) => params.delete(k));
   const newUrl = `${location.origin}${location.pathname}?${params.toString()}`;
   history.pushState({}, "", newUrl);
 };

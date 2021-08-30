@@ -65,17 +65,17 @@ function renderFilter(filter, queryLogic) {
   }
 }
 
-function FigaroFilters({ filters, queryLogic }) {
-  return <>{filters.map((filter) => renderFilter(filter, queryLogic))}</>;
+function SidebarFilters({ filters, queryLogic }) {
+  return filters.map((filter) => renderFilter(filter, queryLogic));
 }
 
-FigaroFilters.propTypes = {
+SidebarFilters.propTypes = {
   filters: PropTypes.array.isRequired,
 };
 
-FigaroFilters.defaultProps = {
+SidebarFilters.defaultProps = {
   filters: [],
   queryLogic: null,
 };
 
-export default FigaroFilters;
+export default SidebarFilters;
