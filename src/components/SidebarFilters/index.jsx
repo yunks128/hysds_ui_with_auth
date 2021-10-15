@@ -25,9 +25,8 @@ function Filter({
           title={title}
           URLParams={true}
           sortBy={sortBy}
-          size={size || 1000}
-          defaultValue={null || defaultValue}
-          react={queryLogic}
+          size={size}
+          defaultValue={defaultValue}
           className="reactivesearch-input reactivesearch-multilist"
         />
       );
@@ -52,14 +51,19 @@ function Filter({
           title={title}
           URLParams={true}
           sortBy={sortBy}
-          size={size || 1000}
-          defaultValue={null || defaultValue}
+          size={size}
+          defaultValue={defaultValue}
           react={queryLogic}
           className="reactivesearch-input"
         />
       );
   }
 }
+
+Filter.defaultProps = {
+  size: 1000,
+  defaultValue: null,
+};
 
 function SidebarFilters({ filters, queryLogic }) {
   return filters.map((filter) => (

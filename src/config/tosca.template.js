@@ -20,14 +20,7 @@ exports.QUERY_SEARCH_COMPONENT_ID = "query_string";
 exports.MAP_COMPONENT_ID = "polygon";
 
 // built in Reactivesearch component id
-exports.DATASET_TYPE_SEARCH_ID = "dataset_type";
-exports.SATELLITE_TYPE_ID = "satellite";
 exports.RESULTS_LIST_COMPONENT_ID = "results";
-exports.DATASET_ID = "dataset";
-exports.START_TIME_ID = "starttime";
-exports.END_TIME_ID = "endtime";
-exports.USER_TAGS = "user_tags";
-exports.DATASET_VERSION = "version";
 
 // fields returned by Elasticsearch (less fields = faster UI)
 exports.FIELDS = [
@@ -128,6 +121,7 @@ exports.QUERY_LOGIC = {
     "endtime",
     "system_version",
     "state",
+    "tags",
     this.ID_COMPONENT,
     this.MAP_COMPONENT_ID,
     this.QUERY_SEARCH_COMPONENT_ID,
