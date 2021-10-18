@@ -13,8 +13,8 @@ exports.FILTERS = [
     componentId: "resource",
     dataField: "resource",
     title: "Resource",
-    type: "single",
-    defaultValue: "job",
+    type: "multi",
+    defaultValue: ["job"],
   },
   {
     componentId: "status",
