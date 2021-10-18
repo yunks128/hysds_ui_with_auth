@@ -22,6 +22,11 @@ exports.FILTERS = [
     title: "Status",
     type: "single",
     sortBy: "asc",
+    defaultValue: [
+      "job-completed",
+      "job-queued",
+      "job-started"
+    ]
   },
   {
     componentId: "tags",
@@ -40,26 +45,26 @@ exports.FILTERS = [
     componentId: "job_type",
     dataField: "job.type",
     title: "Job Type",
-    type: "single",
+    type: "multi",
     size: 1000,
   },
   {
     componentId: "queue",
     dataField: "job.job_info.job_queue",
     title: "Job Queue",
-    type: "single",
+    type: "multi",
   },
   {
     componentId: "username",
     dataField: "job.username",
     title: "Username",
-    type: "single",
+    type: "multi",
   },
   {
     componentId: "node",
     dataField: "job.job_info.execute_node",
     title: "Node",
-    type: "single",
+    type: "multi",
     size: 1000,
   },
   {
@@ -73,32 +78,32 @@ exports.FILTERS = [
     componentId: "short_error",
     dataField: "short_error.keyword",
     title: "Short Error",
-    type: "single",
+    type: "multi",
     size: 1000,
   },
   {
     componentId: "job_detail",
     dataField: "msg",
     title: "Job Detail",
-    type: "single",
+    type: "multi",
   },
   {
     componentId: "container_image",
     dataField: "job.container_image_name",
     title: "Container Image",
-    type: "single",
+    type: "multi",
   },
   {
     componentId: "instance_type",
     dataField: "job.job_info.facts.ec2_instance_type",
     title: "Instance Type",
-    type: "single",
+    type: "multi",
   },
   {
     componentId: "retry_count",
     dataField: "job.retry_count",
     title: "Retry Count",
-    type: "single",
+    type: "multi",
   },
 ];
 
