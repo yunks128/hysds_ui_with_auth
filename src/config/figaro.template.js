@@ -24,6 +24,7 @@ exports.FILTERS = [
     sortBy: "asc",
     defaultValue: [
       "job-completed",
+      "job-failed",
       "job-queued",
       "job-started"
     ]
