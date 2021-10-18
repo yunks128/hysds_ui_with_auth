@@ -20,7 +20,7 @@ exports.FILTERS = [
     componentId: "status",
     dataField: "status",
     title: "Status",
-    type: "single",
+    type: "multi",
     sortBy: "asc",
     defaultValue: [
       "job-completed",
