@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { SingleList, DateRange, MultiList } from "@appbaseio/reactivesearch";
+import { SingleList, DateRange,  } from "@appbaseio/reactivesearch";
 
 import "./style.css";
 
@@ -27,6 +27,7 @@ function Filter({
           sortBy={sortBy}
           size={size}
           defaultValue={defaultValue}
+          react={queryLogic}
           className="reactivesearch-input reactivesearch-multilist"
         />
       );
@@ -44,7 +45,7 @@ function Filter({
     case "single":
     default:
       return (
-        <SingleList
+        <multiList
           componentId={componentId}
           key={componentId}
           dataField={dataField}

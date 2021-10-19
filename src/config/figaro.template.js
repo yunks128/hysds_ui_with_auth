@@ -22,12 +22,6 @@ exports.FILTERS = [
     title: "Status",
     type: "multi",
     sortBy: "asc",
-    defaultValue: [
-      "job-completed",
-      "job-failed",
-      "job-queued",
-      "job-started"
-    ]
   },
   {
     componentId: "tags",
