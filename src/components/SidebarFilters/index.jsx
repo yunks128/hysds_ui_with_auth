@@ -27,7 +27,6 @@ function Filter({
           sortBy={sortBy}
           size={size}
           defaultValue={defaultValue}
-          react={queryLogic}
           className="reactivesearch-input reactivesearch-multilist"
         />
       );
