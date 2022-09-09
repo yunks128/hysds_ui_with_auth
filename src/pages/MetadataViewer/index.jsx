@@ -11,6 +11,7 @@ import HeaderBar from "../../components/HeaderBar";
 import { GRQ_ES_URL } from "../../config";
 
 import "./style.css";
+import {getTokens} from "../../AppWithAuthentication";
 
 const MetadataViewer = (props) => {
   const { id, index } = props.match.params;
@@ -22,8 +23,18 @@ const MetadataViewer = (props) => {
 
   const endpoint = `${GRQ_ES_URL}/${index}/_doc/${id}`;
 
+  const commonGetHeaders = {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+      method: "GET"
+  };
+
+  const commonDeleteHeaders = {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+      method: "DELETE"
+  };
+
   useEffect(() => {
-    fetch(endpoint)
+    fetch(endpoint, commonGetHeaders)
       .then((res) => {
         try {
           return res.json();

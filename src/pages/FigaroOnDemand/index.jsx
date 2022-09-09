@@ -36,6 +36,7 @@ import { buildParams, validateSubmission } from "../../utils";
 import { MOZART_REST_API_V1 } from "../../config";
 
 import "./style.css";
+import {getTokens} from "../../AppWithAuthentication";
 
 class FigaroOnDemand extends React.Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class FigaroOnDemand extends React.Component {
 
     if (this.props.diskUsage) data.disk_usage = this.props.diskUsage;
 
-    const headers = { "Content-Type": "application/json" };
+    const headers = { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken };
     const jobSubmitUrl = `${MOZART_REST_API_V1}/on-demand`;
 
     this.setState({ submitInProgress: 1 });

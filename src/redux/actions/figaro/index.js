@@ -24,23 +24,35 @@ import {
   MOZART_REST_API_V1,
   MOZART_REST_API_V2,
 } from "../../../config";
+import {getTokens} from "../../../AppWithAuthentication";
+
+const commonGetHeaders = {
+    headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+    method: "GET"
+};
+
+const commonDeleteHeaders = {
+    headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+    method: "DELETE"
+};
 
 export const getJobCounts = () => (dispatch) => {
-  const jobCountsEndpoint = `${MOZART_REST_API_BASE}/job_count`;
+    const jobCountsEndpoint = `${MOZART_REST_API_BASE}/job_count`;
 
-  return fetch(jobCountsEndpoint)
-    .then((res) => res.json())
-    .then((data) =>
-      dispatch({
-        type: JOB_COUNTS,
-        payload: data.counts,
-      })
-    );
+    return fetch(jobCountsEndpoint, commonGetHeaders)
+        .then((res) => res.json())
+        .then((data) =>
+            dispatch({
+                type: JOB_COUNTS,
+                payload: data.counts,
+            })
+        );
 };
 
 export const getOnDemandJobs = () => (dispatch) => {
   const getJobsEndpoint = `${MOZART_REST_API_V1}/on-demand`;
-  return fetch(getJobsEndpoint)
+
+  return fetch(getJobsEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
@@ -52,7 +64,8 @@ export const getOnDemandJobs = () => (dispatch) => {
 
 export const getQueueList = (jobSpec) => (dispatch) => {
   const queuesEndpoint = `${MOZART_REST_API_V2}/queue/list?id=${jobSpec}`;
-  return fetch(queuesEndpoint)
+
+  return fetch(queuesEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -69,7 +82,8 @@ export const getQueueList = (jobSpec) => (dispatch) => {
 // /job-params
 export const getParamsList = (jobSpec) => (dispatch) => {
   const paramsListEndpoint = `${MOZART_REST_API_V1}/on-demand/job-params?job_type=${jobSpec}`;
-  return fetch(paramsListEndpoint)
+
+  return fetch(paramsListEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -95,13 +109,13 @@ export const editDataCount = (query) => (dispatch) => {
 
   try {
     let parsedQuery = { query: JSON.parse(query) };
-    const headers = {
-      headers: { "Content-Type": "application/json" },
+    const postHeaders = {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
       method: "POST",
       body: JSON.stringify(parsedQuery),
     };
 
-    fetch(ES_QUERY_DATA_COUNT_ENDPOINT, headers)
+    fetch(ES_QUERY_DATA_COUNT_ENDPOINT, postHeaders)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
@@ -121,7 +135,8 @@ export const editDataCount = (query) => (dispatch) => {
 // TOSCA USER RULES ACTIONS
 export const getUserRules = () => (dispatch) => {
   const getUserRulesEndpoint = `${MOZART_REST_API_V1}/user-rules`;
-  return fetch(getUserRulesEndpoint)
+
+  return fetch(getUserRulesEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
@@ -133,7 +148,8 @@ export const getUserRules = () => (dispatch) => {
 
 export const getUserRule = (id) => (dispatch) => {
   const userRuleEndpoint = `${MOZART_REST_API_V1}/user-rules?id=${id}`;
-  return fetch(userRuleEndpoint)
+
+  return fetch(userRuleEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -155,7 +171,8 @@ export const getUserRule = (id) => (dispatch) => {
       const jobSpec = data.rule.job_spec;
 
       const queuesEndpoint = `${MOZART_REST_API_V2}/queue/list?id=${jobSpec}`;
-      fetch(queuesEndpoint) // fetching the queue list for this job
+
+      fetch(queuesEndpoint, commonGetHeaders) // fetching the queue list for this job
         .then((res) => res.json())
         .then((data) =>
           dispatch({
@@ -166,7 +183,7 @@ export const getUserRule = (id) => (dispatch) => {
         .catch((err) => console.error(err));
 
       const paramsListEndpoint = `${MOZART_REST_API_V1}/on-demand/job-params?job_type=${jobSpec}`;
-      fetch(paramsListEndpoint)
+      fetch(paramsListEndpoint, commonGetHeaders)
         .then((res) => res.json())
         .then((data) => {
           delete data.enable_dedup;
@@ -180,7 +197,8 @@ export const getUserRule = (id) => (dispatch) => {
 
 export const getUserRulesTags = () => (dispatch) => {
   const endpoint = `${MOZART_REST_API_V1}/user-rules-tags`;
-  fetch(endpoint)
+
+  fetch(endpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
@@ -201,13 +219,14 @@ export const toggleUserRule = (index, id, enabled) => (dispatch) => {
     id: id,
     enabled,
   };
-  const headers = {
-    headers: { "Content-Type": "application/json" },
-    method: "PUT",
-    body: JSON.stringify(payload),
+
+  const putHeaders = {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+      method: "PUT",
+      body: JSON.stringify(payload),
   };
 
-  return fetch(toggleUserRuleEndpoint, headers)
+  return fetch(toggleUserRuleEndpoint, putHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -219,7 +238,8 @@ export const toggleUserRule = (index, id, enabled) => (dispatch) => {
 
 export const deleteUserRule = (index, id) => (dispatch) => {
   const deleteRuleEndpoint = `${MOZART_REST_API_V1}/user-rules?id=${id}`;
-  return fetch(deleteRuleEndpoint, { method: "DELETE" })
+
+  return fetch(deleteRuleEndpoint, commonDeleteHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({

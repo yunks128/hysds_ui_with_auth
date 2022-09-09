@@ -4,6 +4,13 @@ import { css } from "emotion";
 
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {getTokens} from "../../AppWithAuthentication";
+
+
+const commonDeleteHeaders = {
+  headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+  method: "DELETE"
+};
 
 function Tag(props) {
   const style = css`
@@ -92,7 +99,7 @@ const UserTags = (props) => {
       const data = { index, id, tag: tag };
       const body = {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken  },
         body: JSON.stringify(data),
       };
 
@@ -103,7 +110,7 @@ const UserTags = (props) => {
   const deleteAPI = (tag) => {
     const params = new URLSearchParams({ id, index, tag });
     const url = `${endpoint}?${params}`;
-    return fetch(url, { method: "DELETE" });
+    return fetch(url, commonDeleteHeaders);
   };
 
   const onDelete = () => {

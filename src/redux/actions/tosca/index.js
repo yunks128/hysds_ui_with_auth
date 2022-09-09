@@ -23,19 +23,30 @@ import {
   GRQ_ES_URL,
   GRQ_ES_INDICES,
 } from "../../../config";
+import {getTokens} from "../../../AppWithAuthentication";
+
+const commonGetHeaders = {
+    headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+    method: "GET"
+};
+
+const commonDeleteHeaders = {
+    headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
+    method: "DELETE"
+};
 
 export const editDataCount = (query) => (dispatch) => {
   const ES_QUERY_DATA_COUNT_ENDPOINT = `${GRQ_ES_URL}/${GRQ_ES_INDICES}/_count`;
 
   try {
     let parsedQuery = { query: JSON.parse(query) };
-    const headers = {
-      headers: { "Content-Type": "application/json" },
+    const postHeaders = {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
       method: "POST",
       body: JSON.stringify(parsedQuery),
     };
 
-    fetch(ES_QUERY_DATA_COUNT_ENDPOINT, headers)
+    fetch(ES_QUERY_DATA_COUNT_ENDPOINT, postHeaders)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
@@ -54,7 +65,7 @@ export const editDataCount = (query) => (dispatch) => {
 
 export const getOnDemandJobs = () => (dispatch) => {
   const getJobsEndpoint = `${GRQ_REST_API_V1}/grq/on-demand`;
-  return fetch(getJobsEndpoint)
+  return fetch(getJobsEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -66,7 +77,7 @@ export const getOnDemandJobs = () => (dispatch) => {
 
 export const getQueueList = (jobSpec) => (dispatch) => {
   const getQueuesEndpoint = `${MOZART_REST_API_V2}/queue/list?id=${jobSpec}`;
-  return fetch(getQueuesEndpoint)
+  return fetch(getQueuesEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -83,7 +94,7 @@ export const getQueueList = (jobSpec) => (dispatch) => {
 // /job-params
 export const getParamsList = (jobSpec) => (dispatch) => {
   const getParamsListEndpoint = `${GRQ_REST_API_V1}/grq/job-params?job_type=${jobSpec}`;
-  return fetch(getParamsListEndpoint)
+  return fetch(getParamsListEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -107,7 +118,7 @@ export const getParamsList = (jobSpec) => (dispatch) => {
 // TOSCA USER RULES ACTIONS
 export const getUserRules = () => (dispatch) => {
   const getUserRulesEndpoint = `${GRQ_REST_API_V1}/grq/user-rules`;
-  return fetch(getUserRulesEndpoint)
+  return fetch(getUserRulesEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
@@ -119,7 +130,7 @@ export const getUserRules = () => (dispatch) => {
 
 export const getUserRule = (id) => (dispatch) => {
   const getUserRuleEndpoint = `${GRQ_REST_API_V1}/grq/user-rules?id=${id}`;
-  return fetch(getUserRuleEndpoint)
+  return fetch(getUserRuleEndpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -141,7 +152,7 @@ export const getUserRule = (id) => (dispatch) => {
       const jobSpec = data.rule.job_spec;
 
       const getQueuesEndpoint = `${MOZART_REST_API_V2}/queue/list?id=${jobSpec}`;
-      fetch(getQueuesEndpoint) // fetching the queue list for this job
+      fetch(getQueuesEndpoint, commonGetHeaders) // fetching the queue list for this job
         .then((res) => res.json())
         .then((data) =>
           dispatch({
@@ -152,7 +163,7 @@ export const getUserRule = (id) => (dispatch) => {
         .catch((err) => console.error(err));
 
       const getParamsListEndpoint = `${GRQ_REST_API_V1}/grq/job-params?job_type=${jobSpec}`;
-      fetch(getParamsListEndpoint)
+      fetch(getParamsListEndpoint, commonGetHeaders)
         .then((res) => res.json())
         .then((data) => {
           delete data.enable_dedup;
@@ -166,7 +177,7 @@ export const getUserRule = (id) => (dispatch) => {
 
 export const getUserRulesTags = () => (dispatch) => {
   const endpoint = `${GRQ_REST_API_V1}/grq/user-rules-tags`;
-  fetch(endpoint)
+  fetch(endpoint, commonGetHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
@@ -187,13 +198,13 @@ export const toggleUserRule = (index, id, enabled) => (dispatch) => {
     id: id,
     enabled,
   };
-  const headers = {
-    headers: { "Content-Type": "application/json" },
+  const putHeaders = {
+    headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
     method: "PUT",
     body: JSON.stringify(payload),
   };
 
-  return fetch(toggleUserRuleEndpoint, headers)
+  return fetch(toggleUserRuleEndpoint, putHeaders)
     .then((res) => res.json())
     .then((data) => {
       dispatch({
@@ -205,7 +216,7 @@ export const toggleUserRule = (index, id, enabled) => (dispatch) => {
 
 export const deleteUserRule = (index, id) => (dispatch) => {
   const deleteRuleEndpoint = `${GRQ_REST_API_V1}/grq/user-rules?id=${id}`;
-  return fetch(deleteRuleEndpoint, { method: "DELETE" })
+  return fetch(deleteRuleEndpoint, commonDeleteHeaders)
     .then((res) => res.json())
     .then((data) =>
       dispatch({
