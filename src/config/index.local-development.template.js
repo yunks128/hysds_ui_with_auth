@@ -38,4 +38,4 @@ exports.OAUTH2_CLIENT_ID = "<CLIENT_ID>";
 exports.OAUTH2_REDIRECT_URI = "http://localhost:8080";
 exports.OAUTH2_PROVIDER_URL = "<UNITY_COGNITO_DOMAIN>/oauth2";
 exports.APP_VIEWER_GROUP_NAME = "Unity_Viewer";
-exports.APP_ADMIN_GROUP_NAME = "Unity_Viewer";
+exports.APP_ADMIN_GROUP_NAME = "Unity_Admin";
