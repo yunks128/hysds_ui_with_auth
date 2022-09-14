@@ -4,13 +4,7 @@ import { css } from "emotion";
 
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {getTokens} from "../../AppWithAuthentication";
-
-
-const commonDeleteHeaders = {
-  headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken },
-  method: "DELETE"
-};
+import {getAccessToken} from "../../AppWithAuthentication";
 
 function Tag(props) {
   const style = css`
@@ -97,20 +91,22 @@ const UserTags = (props) => {
   const onAdd = (tag) => {
     if (userTags.indexOf(tag) === -1) {
       const data = { index, id, tag: tag };
-      const body = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken  },
-        body: JSON.stringify(data),
-      };
 
-      fetch(endpoint, body).then(() => setTags([...userTags, tag]));
+      fetch(endpoint, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getAccessToken()  },
+        body: JSON.stringify(data),
+      }).then(() => setTags([...userTags, tag]));
     }
   };
 
   const deleteAPI = (tag) => {
     const params = new URLSearchParams({ id, index, tag });
     const url = `${endpoint}?${params}`;
-    return fetch(url, commonDeleteHeaders);
+    return fetch(url, {
+  headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getAccessToken() },
+  method: "DELETE"
+});
   };
 
   const onDelete = () => {

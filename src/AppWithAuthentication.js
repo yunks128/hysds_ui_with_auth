@@ -27,7 +27,9 @@ import { Button } from "./components/Buttons";
 import jwt_decode from "jwt-decode";
 
 // Variable to store tokens
-let tokens;
+let accessToken;
+let idToken;
+let refreshToken;
 
 // Initialize AuthService
 const authService = new AuthService({
@@ -69,7 +71,6 @@ function AppWithAuthentication() {
      * Invokes logout for the the user and clears all tokens
      */
     const logout = async () => {
-        tokens = null;
         window.localStorage.removeItem('accessToken');
         window.localStorage.removeItem('idToken');
         window.localStorage.removeItem('refreshToken');
@@ -101,19 +102,13 @@ function AppWithAuthentication() {
     }
 
     // If user is authenticated, then read tokens from the authService
-    let accessToken = authService.getAuthTokens().access_token;
-    let idToken = authService.getAuthTokens().id_token;
-    let refreshToken = authService.getAuthTokens().refresh_token;
-
-    tokens = accessToken === null ? null : {
-        accessToken,
-        idToken,
-        refreshToken
-    };
+    accessToken = authService.getAuthTokens().access_token;
+    idToken = authService.getAuthTokens().id_token;
+    refreshToken = authService.getAuthTokens().refresh_token;
 
     // Get logged in username, email and user groups
-    let accessTokenDecoded = jwt_decode(tokens.accessToken);
-    let idTokenDecoded = jwt_decode(tokens.idToken);
+    let accessTokenDecoded = jwt_decode(accessToken);
+    let idTokenDecoded = jwt_decode(idToken);
     let loggedInUserName = accessTokenDecoded.username;
     let loggedInUserEmail = idTokenDecoded.email;
     let logoutLabel = "Logout : " + loggedInUserName;
@@ -132,13 +127,6 @@ function AppWithAuthentication() {
         );
     }
 
-    // Clear token variables variable after use
-    accessTokenDecoded = "";
-    idTokenDecoded = "";
-    accessToken = "";
-    idToken = "";
-    refreshToken = "";
-
     return (
 
         // Return the App
@@ -151,9 +139,11 @@ function AppWithAuthentication() {
 }
 
 /**
- * Returns tokens
+ * Returns access token
  */
-export const getTokens = () => tokens;
+export function getAccessToken() {
+    return accessToken;
+}
 
 // AppWithAuthentication wrapped by the AuthProviderWrapper
 const AuthProviderWrapper = () => {

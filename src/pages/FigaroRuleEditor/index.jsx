@@ -42,7 +42,7 @@ import { buildParams, validateUserRule } from "../../utils";
 import { MOZART_REST_API_V1 } from "../../config";
 
 import "./style.css";
-import {getTokens} from "../../AppWithAuthentication";
+import {getAccessToken} from "../../AppWithAuthentication";
 
 class FigaroRuleEditor extends React.Component {
   constructor(props) {
@@ -103,12 +103,11 @@ class FigaroRuleEditor extends React.Component {
     this.setState({ submitInProgress: 1 });
 
     const endpoint = `${MOZART_REST_API_V1}/user-rules`;
-    const headers = { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getTokens().accessToken };
-    const method = this.state.editMode ? "PUT" : "POST";
+
     fetch(endpoint, {
-      headers,
-      method,
-      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getAccessToken() },
+      method: this.state.editMode ? "PUT" : "POST",
+      body: JSON.stringify(data)
     })
       .then((res) => res.json())
       .then((data) => {

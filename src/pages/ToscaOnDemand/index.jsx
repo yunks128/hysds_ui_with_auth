@@ -36,6 +36,7 @@ import { buildParams, validateSubmission } from "../../utils";
 import { GRQ_REST_API_V1 } from "../../config";
 
 import "./style.css";
+import {getAccessToken} from "../../AppWithAuthentication";
 
 class ToscaOnDemand extends React.Component {
   constructor(props) {
@@ -93,11 +94,14 @@ class ToscaOnDemand extends React.Component {
 
     if (this.props.diskUsage) data.disk_usage = this.props.diskUsage;
 
-    const headers = { "Content-Type": "application/json" };
     const jobSubmitUrl = `${GRQ_REST_API_V1}/grq/on-demand`;
 
     this.setState({ submitInProgress: 1 });
-    fetch(jobSubmitUrl, { method: "POST", headers, body: JSON.stringify(data) })
+    fetch(jobSubmitUrl,  {
+      headers: { "Content-Type": "application/json", 'Authorization': 'Bearer ' + getAccessToken() },
+      method: "POST",
+      body: JSON.stringify(data)
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
